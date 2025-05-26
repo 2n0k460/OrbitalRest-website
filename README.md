@@ -6,11 +6,13 @@
 ---
 
 ## リポジトリ構成
+```
 /
 ├─ index.html # サポートページ
 ├─ privacy_policy.html # プライバシーポリシー
 ├─ CNAME # カスタムドメイン（orbitalrest.app）
 └─ README.md # このファイル
+```
 
 ---
 
