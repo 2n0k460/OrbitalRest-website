@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OrbitalRest プライバシーポリシー</title>
+  <style>
+    /* Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html {
+      height: 100%;
+      font-family: 'SF Pro JP', 'Hiragino Sans', sans-serif;
+      overflow-x: hidden;
+      color: #ffffff;
+    }
+    #starfield {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+      background: #08142A;
+    }
+    header {
+      text-align: center;
+      padding: 60px 20px 10px;
+    }
+    header h1 {
+      font-size: 2.5em;
+      text-shadow: 0 0 8px rgba(85,207,255,0.8);
+    }
+    header p {
+      font-size: 1em;
+      color: #AFC1D8;
+      margin-top: 6px;
+    }
+    main {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background: rgba(8,20,42,0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+    }
+    section {
+      margin-bottom: 30px;
+    }
+    h2 {
+      font-size: 1.4em;
+      color: #9FCBFF;
+      border-left: 4px solid #55CFFF;
+      padding-left: 12px;
+      margin-bottom: 10px;
+      text-shadow: 0 0 4px rgba(85,207,255,0.6);
+    }
+    p, ul {
+      margin-bottom: 16px;
+      line-height: 1.8;
+    }
+    ul {
+      padding-left: 20px;
+      list-style-type: disc;
+    }
+    a {
+      color: #55CFFF;
+      text-decoration: underline;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.8em;
+      color: #667;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="starfield"></canvas>
+  <header>
+    <h1>プライバシーポリシー</h1>
+    <p>OrbitalRest（以下「当アプリ」）は、ユーザーのプライバシーを最大限に尊重し、以下のポリシーに基づき個人情報の取り扱いを行います。</p>
+  </header>
+  <main>
+    <section>
+      <h2>1. 収集する情報と目的</h2>
+      <ul>
+        <li><strong>動作センサー情報</strong><br>CoreMotion APIを使用し、デバイスの傾き情報を取得します。休息セッションの開始・終了を検知するためにのみ利用します。</li>
+        <li><strong>環境光量</strong><br>Ambient Light Sensor（明るさセンサー）を使用し、周囲の光量を取得します。星の色調整に利用し、視覚体験を最適化します。生データは記録せず、端末内のみで処作します。</li>
+        <li><strong>音量（振幅レベル）</strong><br>AVAudioSessionの平均パワーを参照し、周囲の環境音レベルを把握します。星のサイズや輝きを変化させるためにのみ利用し、録音は行いません。</li>
+        <li><strong>ユーザー提供情報</strong><br>気分タグ（集中／リラックス等）をセッションに紐づけて記録します。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>2. 情報の保存と同期</h2>
+      <p>収集したデータ（セッション・星の生成履歴・気分タグ）はSwiftDataを用いて端末内に保存し、ユーザーのiCloudアカウントに同期されます。ユーザーがiCloudをオフにしている場合は、端末内のみに保存されます。</p>
+    </section>
+    <section>
+      <h2>3. 情報の共有・第三者提供</h2>
+      <p>以下の場合を除き、収集した情報を第三者に提供することはありません。</p>
+      <ul>
+        <li>ユーザーの同意がある場合</li>
+        <li>法令に基づき開示が必要な場合</li>
+      </ul>
+    </section>
+    <section>
+      <h2>4. セキュリティ対策</h2>
+      <p>すべてのデータは端末内およびAppleのiCloudサーバー上で暗号化されています。外部からの不正アクセス防止に努めます。</p>
+    </section>
+    <section>
+      <h2>5. ユーザーの権利</h2>
+      <ul>
+        <li>データ閲覧・修正・削除の権利</li>
+        <li>iCloud同期のオン/オフ設定</li>
+        <li>プライバシー設定画面からのセンサー利用許可管理</li>
+      </ul>
+    </section>
+    <section>
+      <h2>6. プライバシーポリシーの変更</h2>
+      <p>本ポリシーは予告なく変更されることがあります。変更後はアプリ内およびサポートページでお知らせします。</p>
+    </section>
+  </main>
+  <footer>
+    &copy; 2025 OrbitalRest. All rights reserved.<br>
+    <a href="index.html">サポートページへ戻る</a>
+  </footer>
+  <script>
+    // Starfield animation (same as support page)
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    const numStars = 150;
+
+    function init() {
+      resize();
+      stars = [];
+      for(let i = 0; i < numStars; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 1.2 + 0.3,
+          alpha: Math.random(),
+          delta: Math.random() * 0.02 + 0.005
+        });
+      }
+      animate();
+    }
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function animate() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      stars.forEach(star => {
+        star.alpha += star.delta;
+        if (star.alpha <= 0 || star.alpha >= 1) star.delta *= -1;
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(255,255,255,' + star.alpha + ')';
+        ctx.fill();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', init);
+    init();
+  </script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OrbitalRest サポート</title>
+  <style>
+    /* Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Full-screen starfield canvas behind content */
+    body, html {
+      height: 100%;
+      font-family: 'SF Pro JP', 'Hiragino Sans', sans-serif;
+      overflow-x: hidden;
+      color: #ffffff;
+    }
+    #starfield {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+      background: #08142A;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      padding: 80px 20px 20px;
+    }
+    header h1 {
+      font-size: 3em;
+      text-shadow: 0 0 8px rgba(85,207,255,0.8);
+    }
+    header p {
+      font-size: 1.2em;
+      color: #AFC1D8;
+      margin-top: 8px;
+    }
+
+    /* Main content */
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 20px;
+      background: rgba(8,20,42,0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+    }
+    section {
+      margin-bottom: 40px;
+    }
+    h2 {
+      font-size: 1.6em;
+      color: #9FCBFF;
+      border-left: 4px solid #55CFFF;
+      padding-left: 12px;
+      margin-bottom: 12px;
+      text-shadow: 0 0 4px rgba(85,207,255,0.6);
+    }
+    p {
+      margin-bottom: 16px;
+      line-height: 1.8;
+    }
+    a {
+      color: #55CFFF;
+      text-decoration: underline;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      font-size: 0.9em;
+      color: #667;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="starfield"></canvas>
+  <header>
+    <h1>OrbitalRest サポート</h1>
+    <p>夜の静寂を、あなたの宇宙に刻む。</p>
+  </header>
+  <main>
+    <section>
+      <h2>よくある質問</h2>
+      <p><strong>Q. どうやってセッションを始めますか？</strong><br>
+      A. スマホを伏せるだけで、あなたの専用セッションが開始します。端末を持ち上げると星空のダイアリーをご覧いただけます。</p>
+
+      <p><strong>Q. どんなセンサーを使うの？</strong><br>
+      A. CoreMotion での傾き検知、周囲の光量、音量（振幅のみ）を組み合わせ、あなたの“星”を描き出します。録音や位置情報の取得は一切行いません。</p>
+
+      <p><strong>Q. 星の記録はどこに保存される？</strong><br>
+      A. ローカルの SwiftData と iCloud に同期され、いつでもどこでも続きの物語を呼び出せます。</p>
+    </section>
+
+    <section>
+      <h2>お問い合わせ</h2>
+      <p>技術的なご質問やバグ報告は、宇宙管制センター（サポートメール）までお願いします。<br>
+      <a href="mailto:support@orbitalrest.app">support@orbitalrest.app</a></p>
+    </section>
+
+    <section>
+      <h2>プライバシーと安心</h2>
+      <p>OrbitalRest はあなたのプライバシーを守るため、すべての解析を端末内で完結。音声の録音や送信は行わず、光・傾き・振幅データのみを活用します。詳しくは<a href="privacy_policy.html">プライバシーポリシー</a>をご覧ください。</p>
+    </section>
+  </main>
+  <footer>
+    &copy; 2025 OrbitalRest. All rights reserved.
+  </footer>
+
+  <script>
+    // Starfield animation
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    const numStars = 150;
+
+    function init() {
+      resize();
+      stars = [];
+      for(let i = 0; i < numStars; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 1.2 + 0.3,
+          alpha: Math.random(),
+          delta: Math.random() * 0.02 + 0.005
+        });
+      }
+      animate();
+    }
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function animate() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      stars.forEach(star => {
+        star.alpha += star.delta;
+        if (star.alpha <= 0 || star.alpha >= 1) star.delta *= -1;
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(255,255,255,' + star.alpha + ')';
+        ctx.fill();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', init);
+    init();
+  </script>
+</body>
+</html>
